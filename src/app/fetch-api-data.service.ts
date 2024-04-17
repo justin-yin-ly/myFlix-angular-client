@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/internal/operators';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 //Declaring the api url that will provide data for the client app
-const apiUrl = 'YOUR_HOSTED_API_URL_HERE/';
+const apiUrl = 'https://cinedata-05d7865bba09.herokuapp.com/';
 @Injectable({
   providedIn: 'root'
 })
@@ -130,7 +129,7 @@ removeFavorite(movieID: string): Observable<any> {
   if(removeID > -1) {
     user.favorites.splice(removeID, 1);
   }
-  
+
   localStorage.setItem('user', JSON.stringify(user))
 
   return this.http.put(apiUrl + 'users/' + user.username, {}, {headers: new HttpHeaders(
