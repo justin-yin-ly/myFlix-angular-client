@@ -17,7 +17,6 @@ export class UserRegistrationService {
   
 // Register User - Making the api call for the user registration endpoint
 public userRegistration(userDetails: any): Observable<any> {
-  console.log(userDetails);
   return this.http.post(apiUrl + 'users', userDetails).pipe(
   catchError(this.handleError)
   );
@@ -25,7 +24,6 @@ public userRegistration(userDetails: any): Observable<any> {
 
 // Login User
 public userLogin(userDetails: any): Observable<any> {
-  console.log(userDetails);
   return this.http.post(apiUrl + 'login', userDetails).pipe(
   catchError(this.handleError)
   );
@@ -55,6 +53,18 @@ getMovie(title: string): Observable<any> {
   );
 }
 
+// Get All Directors
+getAllDirectors(): Observable<any> {
+  const token = localStorage.getItem('token');
+  return this.http.get(apiUrl + 'directors', {headers: new HttpHeaders(
+    {
+      Authorization: 'Bearer ' + token,
+    })}).pipe(
+    map(this.extractResponseData),
+    catchError(this.handleError)
+  );
+}
+
 // Get Director
 getDirector(name: string): Observable<any> {
   const token = localStorage.getItem('token');
@@ -67,10 +77,34 @@ getDirector(name: string): Observable<any> {
   );
 }
 
+// Get All Genres
+getAllGenres(): Observable<any> {
+  const token = localStorage.getItem('token');
+  return this.http.get(apiUrl + 'genres', {headers: new HttpHeaders(
+    {
+      Authorization: 'Bearer ' + token,
+    })}).pipe(
+    map(this.extractResponseData),
+    catchError(this.handleError)
+  );
+}
+
 // Get Genre
 getGenre(name: string): Observable<any> {
   const token = localStorage.getItem('token');
   return this.http.get(apiUrl + 'genres/' + name, {headers: new HttpHeaders(
+    {
+      Authorization: 'Bearer ' + token,
+    })}).pipe(
+    map(this.extractResponseData),
+    catchError(this.handleError)
+  );
+}
+
+// Get All Users
+getAllUsers(): Observable<any> {
+  const token = localStorage.getItem('token');
+  return this.http.get(apiUrl + 'users/', {headers: new HttpHeaders(
     {
       Authorization: 'Bearer ' + token,
     })}).pipe(
@@ -99,7 +133,7 @@ getUserFavorites(username: string): Observable<any> {
       Authorization: 'Bearer ' + token,
     })}).pipe(
     map(this.extractResponseData),
-    map((data) => data.favorites),
+    map((data) => data.favoriteMovies),
     catchError(this.handleError)
   );
 }
@@ -108,10 +142,10 @@ getUserFavorites(username: string): Observable<any> {
 addFavorite(movieID: string): Observable<any> {
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  user.favorites.push(movieID);
+  user.favoriteMovies.push(movieID);
   localStorage.setItem('user', JSON.stringify(user));
 
-  return this.http.put(apiUrl + 'users/' + user.username, {}, {headers: new HttpHeaders(
+  return this.http.post(apiUrl + 'users/' + user.username + '/favorites/' + movieID, {}, {headers: new HttpHeaders(
     {
       Authorization: 'Bearer ' + token,
     })}).pipe(
@@ -124,15 +158,15 @@ addFavorite(movieID: string): Observable<any> {
 removeFavorite(movieID: string): Observable<any> {
   const token = localStorage.getItem('token');
   const user = JSON.parse(localStorage.getItem('user') || '{}');
-  const removeID = user.favorites.indexOf(movieID);
+  const removeID = user.favoriteMovies.indexOf(movieID);
 
   if(removeID > -1) {
-    user.favorites.splice(removeID, 1);
+    user.favoriteMovies.splice(removeID, 1);
   }
 
   localStorage.setItem('user', JSON.stringify(user))
 
-  return this.http.put(apiUrl + 'users/' + user.username, {}, {headers: new HttpHeaders(
+  return this.http.delete(apiUrl + 'users/' + user.username + '/favorites/' + movieID, {headers: new HttpHeaders(
     {
       Authorization: 'Bearer ' + token,
     })}).pipe(
@@ -143,8 +177,9 @@ removeFavorite(movieID: string): Observable<any> {
 
 // Edit User
 editUser(userDetails: any): Observable<any> {
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
   const token = localStorage.getItem('token');
-  return this.http.put(apiUrl + 'users/' + userDetails.username, userDetails, {headers: new HttpHeaders(
+  return this.http.put(apiUrl + 'users/' + user.username, userDetails, {headers: new HttpHeaders(
     {
       Authorization: 'Bearer ' + token,
     })}).pipe(

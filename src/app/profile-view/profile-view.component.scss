@@ -1,10 +1,10 @@
-.main-view {
-    background-color: rgb(158, 30, 30);
+.profile {
     margin: 0px 150px;
+    background-color: rgb(158, 30, 30);
 }
 
 @media screen and (max-width: 750px) {
-    .main-view{
+    .profile{
         margin: 0px 50px;
     }
 }

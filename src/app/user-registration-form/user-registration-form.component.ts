@@ -20,6 +20,8 @@ export class UserRegistrationFormComponent implements OnInit {
 
   @Input() userData = { username: '', password: '', email: '', birthday: '' };
 
+  token : any = localStorage.getItem('token');
+
   constructor(
     public fetchApiData: UserRegistrationService,
     public dialogRef: MatDialogRef<UserRegistrationFormComponent>,
@@ -34,15 +36,24 @@ export class UserRegistrationFormComponent implements OnInit {
       this.fetchApiData.userRegistration(this.userData).subscribe((result) => {
     // Logic for a successful user registration goes here! (To be implemented)
        this.dialogRef.close(); // This will close the modal on success!
-       console.log(result);
        this.snackBar.open(result, 'OK', {
           duration: 2000
        });
       }, (result) => {
-        console.log(result);
         this.snackBar.open(result, 'OK', {
           duration: 2000
         });
       });
   }
+
+  updateUser(): void {
+    this.fetchApiData.editUser(this.userData).subscribe((result) => {
+      localStorage.setItem('user', JSON.stringify(result));
+  // Logic for a successful user registration goes here! (To be implemented)
+     this.dialogRef.close(); // This will close the modal on success!
+     this.snackBar.open("User updated.", 'OK', {
+        duration: 2000
+     });
+    });
+}
 }

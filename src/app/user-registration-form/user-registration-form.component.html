@@ -1,7 +1,7 @@
 <!-- src/app/user-registration-form/user-registration-form.component.html -->
 <mat-card>
     <mat-card-header>
-      <mat-card-title>Sign Up!</mat-card-title>
+      <mat-card-title>{{token ? 'Update' : 'Sign up!'}}</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form>
@@ -48,11 +48,20 @@
     </mat-card-content>
     <mat-card-actions>
         <button
+          *ngIf="token === null"
           mat-raised-button
           (click)="registerUser()"
           color="primary"
         >
           Sign Up
         </button>
+        <button
+        *ngIf="token !== null"
+        mat-raised-button
+        (click)="updateUser()"
+        color="primary"
+      >
+        Update
+      </button>
     </mat-card-actions>
   </mat-card>

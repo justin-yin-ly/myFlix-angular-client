@@ -1,0 +1,24 @@
+.main-page {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    background-color: rgb(158, 30, 30);
+    margin: -21px 150px;
+    height: 100%;
+}
+
+.buttons {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+.content {
+    margin-top: 20%;
+}
+
+@media screen and (max-width: 750px) {
+    .main-page{
+        margin: 0px 50px;
+    }
+}

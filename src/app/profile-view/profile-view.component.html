@@ -1,0 +1,83 @@
+<mat-card class="profile">
+    <mat-card-content>
+        <mat-card-title>Your Profile</mat-card-title>
+        Username: {{userInfo.username}} <br>
+        Email: {{userInfo.email}} <br>
+        Birthday: {{userInfo.birthday}} <br>
+    </mat-card-content>
+    <mat-card-actions>
+        <button
+            mat-raised-button
+            color="primary"
+            (click)="goToMovies()"
+        >
+            Back
+        </button>
+
+        <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 10px"
+        (click)="openEditDialog()"
+        >
+            Edit Profile
+        </button>
+
+        <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 10px"
+        (click)="logoutUser()"
+        >
+            Logout
+        </button>
+
+        <button
+        mat-raised-button
+        color="primary"
+        style="margin-left: 10px"
+        (click)="deleteUser()"
+        >
+            Delete Account
+        </button>
+
+    </mat-card-actions>
+    <mat-card-content>
+        <mat-card-title>Your Favorite Movies</mat-card-title>
+        <div style="display: flex; flex-wrap: wrap;">
+            <mat-card *ngFor="let movie of filteredMovies;" style="flex: 1 1 auto; width: 300px; padding: 10px;">
+                <mat-card-header>
+                <mat-card-title>{{movie.title}}</mat-card-title>
+                    <mat-card-subtitle>Directed by: {{directorDict[movie.director.directorID]}}</mat-card-subtitle>
+                </mat-card-header>
+                <img src={{movie.imagePath}} alt= {{movie.title}} />
+                <mat-card-actions>
+                    <button
+                        mat-button
+                        color="primary"
+                        (click)="openGenreDialog(movie.genre.genreID)"
+                    >
+                        Genre
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                        (click)="openDirectorDialog(movie.director.directorID)"
+                    >
+                        Director
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                        (click)="openDetailDialog(movie.title, movie.description)"
+                    >
+                        Synopsis
+                    </button>
+                    <mat-icon
+                        (click)="favoriteCheck(movie._id) ? removeFromFavorite(movie._id) : addAsFavorite(movie._id)"
+                    >{{ favoriteCheck(movie._id) ? 'favorite' : 'favorite_border'}}</mat-icon>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </mat-card-content>
+</mat-card>
